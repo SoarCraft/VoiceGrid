@@ -1,7 +1,7 @@
+import { AudioOutlined } from "@ant-design/icons";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Layout, Menu } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
-import Sider from "antd/es/layout/Sider";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -16,32 +16,27 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="antialiased">
         <AntdRegistry>
           <Layout className="!min-h-screen antialiased">
-            <Sider theme="light" collapsible>
-              <div className="text-center py-4 text-xl">VoiceGrid</div>
+            <Header className="!bg-white flex items-center">
+              <div className="mr-6 text-xl flex gap-2">
+                <AudioOutlined />
+                VoiceGrid
+              </div>
 
-              <Menu defaultSelectedKeys={['1']} mode="inline" items={[
+              <Menu mode="horizontal" defaultSelectedKeys={['1']} items={[
                 {
                   key: "1",
                   label: "Datasets",
                 }
               ]} />
-            </Sider>
+            </Header>
 
-            <Layout>
-              <Header className="!bg-white">
-                123
-              </Header>
+            <Content className="flex flex-col gap-6 mx-5 mt-6">
+              {children}
+            </Content>
 
-              <Content className="m-4">
-                <div className="p-6 min-h-80 bg-white rounded-lg">
-                  {children}
-                </div>
-              </Content>
-
-              <Footer className="text-center">
-                SoarCraft ©{new Date().getFullYear()} Part of CheersYou
-              </Footer>
-            </Layout>
+            <Footer className="text-center">
+              SoarCraft ©{new Date().getFullYear()} Part of CheersYou
+            </Footer>
           </Layout>
         </AntdRegistry>
       </body>

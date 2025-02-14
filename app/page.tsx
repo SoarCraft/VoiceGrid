@@ -1,9 +1,9 @@
-import { Button } from "antd";
+import { Card } from "antd";
 
 export default function Home() {
   return (
-    <div>
-      <Button type="primary">Button</Button>
-    </div>
+    <Card>
+      123
+    </Card>
   );
 }
