@@ -1,13 +1,7 @@
-import { Card, Table, Tag } from "antd";
+import { Card } from "antd";
 
-const { Column } = Table;
-
-interface IDatasetList {
-  key: number;
-  name: string;
-  items: number;
-  tags: string[];
-}
+import DatasetTable from "@/app/components/DatasetTable";
+import type { IDatasetList } from "@/app/components/DatasetTable";
 
 const mock: IDatasetList[] = [
   {
@@ -24,29 +18,13 @@ const mock: IDatasetList[] = [
   },
 ];
 
-export default function Home() {
-  return <>
+const Home = () => (
+  <>
     <Card>
       123
     </Card>
+    <DatasetTable mock={mock} />
+  </>
+);
 
-    <Table<IDatasetList> dataSource={mock}>
-      <Column title="Id" dataIndex="key" key="key" />
-      <Column title="Name" dataIndex="name" key="name" />
-      <Column title="Items" dataIndex="items" key="items" />
-
-      <Column
-        title="Tags"
-        dataIndex="tags"
-        key="tags"
-        render={(tags: string[]) => <>
-          {tags.map((tag) => (
-            <Tag key={tag}>
-              {tag}
-            </Tag>
-          ))}
-        </>}
-      />
-    </Table>
-  </>;
-}
+export default Home;
