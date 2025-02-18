@@ -6,3 +6,23 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Dataset {
+  id   Int    @id @default(autoincrement())
+  name String
+  path String
+  tags Tag[]
+  Item Item[]
+}
+
+model Tag {
+  name     String    @id
+  datasets Dataset[]
+}
+
+model Item {
+  id        Int     @id @default(autoincrement())
+  name      String
+  dataset   Dataset @relation(fields: [datasetId], references: [id])
+  datasetId Int
+}
