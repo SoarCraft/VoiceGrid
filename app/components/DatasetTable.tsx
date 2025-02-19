@@ -6,11 +6,18 @@ import { ProTable } from "@ant-design/pro-components";
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Space, Tag, message } from "antd";
 
+import TagList from "@/app/components/TagList";
+
 interface IDatasetList {
   key: number;
   name: string;
   items: number;
   tags: string[];
+}
+
+type TagFilterType = {
+  text: string;
+  value: string;
 }
 
 type SearchType = ParamsType & {
@@ -38,6 +45,11 @@ const DatasetTable = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [newRecordKey, setNewRecordKey] = useState<number | null>(null);
   const [creating, setCreating] = useState<boolean>(false);
+  const [tagsFilter, setTagsFilter] = useState<TagFilterType[]>([
+    { text: 'tag1', value: 'tag1' },
+    { text: 'tag2', value: 'tag2' },
+    { text: 'tag3', value: 'tag3' },
+  ]);
 
   const handleAdd = async () => {
     const newKey = Date.now();
@@ -68,6 +80,19 @@ const DatasetTable = () => {
         item.key === key ? { ...item, ...data } : item
       )
     );
+
+    const newTags = data.tags;
+    const prevTags = tagsFilter.map(tag => tag.value);
+    const newTagsFilter: TagFilterType[] = [];
+    newTags.map(tag => {
+      if (!prevTags.includes(tag)) {
+        newTagsFilter.push({
+          value: tag,
+          text: tag,
+        })
+      }
+    });
+    setTagsFilter([...tagsFilter, ...newTagsFilter]);
   }
 
   const columns: ProColumns<IDatasetList>[] = [
@@ -93,28 +118,29 @@ const DatasetTable = () => {
       title: "标签",
       dataIndex: "tags",
       search: false,
-      filters: [
-        { text: 'tag1', value: 'tag1' },
-        { text: 'tag2', value: 'tag2' },
-        { text: 'tag3', value: 'tag3' },
-      ],
+      filters: tagsFilter,
       onFilter: (value, record) => record.tags.includes(value as string),
-      valueType: "checkbox",
-      valueEnum: {
-        tag1: { text: "tag1" },
-        tag2: { text: "tag2" },
-        tag3: { text: "tag3" },
-      },
       key: "tags",
+      renderFormItem: (_, { value, onChange }) => (
+        <TagList
+          value={value}
+          onChange={onChange as (value: string[]) => void}
+        />
+      ),
       render: (_, record) => (
         <Space>
           {record.tags.map((tag) => (
-            <Tag key={tag}>
+            <Tag key={record.key}>
               {tag}
             </Tag>
           ))}
         </Space>
       ),
+    },
+    {
+      title: "标签",
+      hideInTable: true,
+      dataIndex: "tags",
     },
     {
       title: "选项",
@@ -143,13 +169,18 @@ const DatasetTable = () => {
     }
 
     if (params.items) {
-      const threshold = 5;
+      const threshold = 10;
       const searchItems = params.items;
       data = data.filter(item => (
         item.items >= searchItems - threshold
         &&
         item.items <= searchItems + threshold
       ));
+    }
+
+    if (params.tags) {
+      const searchTag = params.tags;
+      data = mock.filter(item => item.tags.includes(searchTag));
     }
 
     if (filter.tags && filter.tags.length > 0) {
@@ -180,7 +211,7 @@ const DatasetTable = () => {
           onSave: async (rowKey, data, row) => {
             console.log(rowKey, data, row);
             if (!data.name || !data.tags.length) {
-              messageApi.warning("请填写名称并至少填写一个标签");
+              messageApi.warning("请填写名称并至少添加一个标签");
               return Promise.reject();
             }
             handleSave(rowKey as number, data);
