@@ -1,48 +1,18 @@
 "use client";
 
 import { useRef, useState } from "react";
-import type { ActionType, ParamsType, ProColumns } from "@ant-design/pro-components";
+import type { ActionType, ProColumns } from "@ant-design/pro-components";
 import { ProTable } from "@ant-design/pro-components";
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Space, Tag, message } from "antd";
+import { v4 as uuid } from "uuid";
 
-import TagList from "@/app/components/TagList";
-
-interface IDatasetList {
-  key: number;
-  name: string;
-  items: number;
-  tags: string[];
-}
-
-type TagFilterType = {
-  text: string;
-  value: string;
-}
-
-type SearchType = ParamsType & {
-  pageSize?: number;
-  current?: number;
-  keyword?: string;
-}
-
-const initMock: IDatasetList[] = [
-  { key: 1, name: "dataset1", items: 100, tags: ["tag1", "tag2"] },
-  { key: 2, name: "dataset2", items: 200, tags: ["tag1", "tag3"] },
-  { key: 3, name: "dataset3", items: 150, tags: ["tag2", "tag3"] },
-  { key: 4, name: "dataset4", items: 120, tags: ["tag1"] },
-  { key: 5, name: "dataset5", items: 180, tags: ["tag2"] },
-  { key: 6, name: "dataset6", items: 120,  tags: ["tag2", "tag3"] },
-  { key: 7, name: "dataset7", items: 110,  tags: ["tag1", "tag3"] },
-  { key: 8, name: "dataset8", items: 8,  tags: ["tag3"] },
-  { key: 9, name: "dataset9", items: 90,  tags: ["tag2"] },
-  { key: 10, name: "dataset10", items: 170,  tags: ["tag3"] },
-];
+import TagList from "@/app/components/Home/TagList";
+import { initMock } from "@/app/types/DatasetListTypes";
+import type { IDatasetList, TagFilterType, SearchType } from "@/app/types/DatasetListTypes";
 
 const DatasetTable = () => {
-  const actionRef = useRef<ActionType>(null);
   const [mock, setMock] = useState<IDatasetList[]>(initMock);
-  const [messageApi, contextHolder] = message.useMessage();
   const [newRecordKey, setNewRecordKey] = useState<number | null>(null);
   const [creating, setCreating] = useState<boolean>(false);
   const [tagsFilter, setTagsFilter] = useState<TagFilterType[]>([
@@ -51,10 +21,15 @@ const DatasetTable = () => {
     { text: 'tag3', value: 'tag3' },
   ]);
 
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const actionRef = useRef<ActionType>(null);
+
   const handleAdd = async () => {
     const newKey = Date.now();
     const newRow: IDatasetList = {
       key: newKey,
+      id: uuid(),
       name: "",
       items: Math.floor(Math.random() * 21) * 10,
       tags: [],
@@ -147,7 +122,7 @@ const DatasetTable = () => {
       key: "options",
       valueType: "option",
       render: (_, record, __, action) => [
-        <a key="check">查看</a>,
+        <a key="check" href={`/dataset/${record.id}`}>查看</a>,
         <a
           key="edit"
           onClick={() => {

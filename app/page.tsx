@@ -1,4 +1,4 @@
-import DatasetTable from "@/app/components/DatasetTable";
+import DatasetTable from "@/app/components/Home/DatasetTable";
 
 const Home = () => (
   <DatasetTable />

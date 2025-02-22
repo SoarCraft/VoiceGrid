@@ -6,7 +6,7 @@ type TagListProps = {
   onChange: (value: string[]) => void;
 }
 
-const TagList = ({ value, onChange }: TagListProps) => {
+const TagList: React.FC<TagListProps> = ({ value, onChange }) => {
   const ref = useRef<InputRef | null>(null);
   const [inputValue, setInputValue] = useState<string>('');
 
