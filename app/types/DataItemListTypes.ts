@@ -6,8 +6,8 @@ export interface DimensionType {
   voice_character: number;
   texture: number;
   magnetism: number;
-  clarity: number;
   emotion: number;
+  clarity: number;
   power: number;
   breathiness: number;
   resonance: number;
@@ -17,19 +17,19 @@ export interface DimensionType {
 }
 
 export const dimensionTitleDictionary = {
-  gender: "性别",
-  age_range: "年龄范围",
-  voice_character: "音色类型",
-  texture: "音质质感",
-  magnetism: "声音磁性",
-  clarity: "清晰度",
-  emotion: "情感表达",
-  power: "力度表现",
-  breathiness: "气声感",
-  resonance: "共鸣感",
-  articulation: "咬字清晰度",
-  pitch_range: "音域跨度",
-  vibrato: "颤音强度",
+  gender: { text: "性别", width: 70 },
+  age_range: { text: "年龄范围", width: 100 },
+  voice_character: { text: "音色类型", width: 100 },
+  texture: { text: "音质质感", width: 100 },
+  magnetism: { text: "声音磁性", width: 100 },
+  emotion: { text: "情感表达", width: 100 },
+  clarity: { text: "清晰度", width: 100 },
+  power: { text: "力度表现", width: 100 },
+  breathiness: { text: "气声感", width: 100 },
+  resonance: { text: "共鸣感", width: 100 },
+  articulation: { text: "咬字清晰度", width: 100 },
+  pitch_range: { text: "音域跨度", width: 100 },
+  vibrato: { text: "颤音强度", width: 100 },
 }
 
 export const dimensionDictionary = {
@@ -84,7 +84,7 @@ const getRandomDimension = (): DimensionType => {
 
 const getDataItems = (datasetIndex: number): DataItemType[] => {
   const prefix = `dataset${datasetIndex}`;
-  return new Array(10).fill(1).map((_, index) => {
+  return new Array(100).fill(1).map((_, index) => {
     return {
       key: index,
       name: `${prefix} - item${index}`,
